@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Tracker</title>
+
+    <!-- Bootstrap for the layout and buttons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container">
+            <span class="navbar-brand">🏃 Track Tracker</span>
+            <div>
+                <button id="loadSampleBtn" class="btn btn-outline-light btn-sm">Load example races</button>
+                <button id="clearBtn" class="btn btn-outline-danger btn-sm">Clear all</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- Personal records -->
+        <h4>Personal Records</h4>
+        <div class="row mb-4" id="prCards">
+            <!-- filled in by script.js -->
+        </div>
+
+        <div class="row">
+
+            <!-- Add race form -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Add a race</h5>
+
+                        <form id="raceForm">
+                            <div class="mb-3">
+                                <label for="dateInput" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="dateInput" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="meetInput" class="form-label">Meet</label>
+                                <input type="text" class="form-control" id="meetInput" placeholder="Conference Championships" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="eventInput" class="form-label">Event</label>
+                                <select class="form-select" id="eventInput">
+                                    <option value="400m">400m</option>
+                                    <option value="800m" selected>800m</option>
+                                    <option value="Mile">Mile</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="timeInput" class="form-label">Time</label>
+                                <input type="text" class="form-control" id="timeInput" placeholder="1:58.4" required>
+                                <div class="form-text">Use 52.3 or 1:58.4 or 4:45</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Add race</button>
+                            <p id="formError" class="text-danger mt-2 mb-0"></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="col-md-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title mb-0">Progress</h5>
+
+                            <div class="btn-group btn-group-sm" id="chartTabs">
+                                <button class="btn btn-outline-secondary" data-event="400m">400m</button>
+                                <button class="btn btn-outline-secondary active" data-event="800m">800m</button>
+                                <button class="btn btn-outline-secondary" data-event="Mile">Mile</button>
+                            </div>
+                        </div>
+
+                        <div class="chart-box">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                        <p id="chartEmpty" class="text-muted text-center mt-3">Add a few races to see your progress.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <!-- Pace calculator + predictor -->
+            <div class="col-md-4 mb-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Pace calculator</h5>
+                        <p class="text-muted small">Type a goal and see the even splits you need.</p>
+
+                        <div class="input-group mb-3">
+                            <select class="form-select" id="goalEvent">
+                                <option value="400m">400m</option>
+                                <option value="800m" selected>800m</option>
+                                <option value="Mile">Mile</option>
+                            </select>
+                            <input type="text" class="form-control" id="goalTime" placeholder="1:55">
+                        </div>
+
+                        <ul class="list-group" id="splitList"></ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Race predictor</h5>
+                        <p class="text-muted small">Uses your PR in one event to predict the others.</p>
+
+                        <select class="form-select mb-3" id="predictFrom">
+                            <option value="400m">From my 400m PR</option>
+                            <option value="800m" selected>From my 800m PR</option>
+                            <option value="Mile">From my Mile PR</option>
+                        </select>
+
+                        <ul class="list-group" id="predictList"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Race log table -->
+            <div class="col-md-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Race log</h5>
+
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Meet</th>
+                                    <th>Event</th>
+                                    <th>Time</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="raceRows"></tbody>
+                        </table>
+
+                        <p id="logEmpty" class="text-muted text-center">No races yet. Add one or load the example races.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer class="text-center text-muted py-4">
+        <small>Made by <a href="https://github.com/sheronsmith">Sheron Smith</a>. Your data stays in your browser.</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script type="module" src="script.js"></script>
+
+</body>
+</html>

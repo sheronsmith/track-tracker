@@ -1,0 +1,11 @@
+{
+  "name": "track-tracker",
+  "version": "1.0.0",
+  "description": "Log your meets, track your PRs, watch your progress",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "start": "npx serve ."
+  },
+  "license": "MIT"
+}

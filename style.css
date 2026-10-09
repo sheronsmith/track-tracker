@@ -1,0 +1,32 @@
+/* Small tweaks on top of Bootstrap */
+
+body {
+    background-color: #f4f6f9;
+}
+
+.pr-card .pr-time {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.pr-card .season-best {
+    color: #198754;
+    font-size: 0.9rem;
+}
+
+.chart-box {
+    position: relative;
+    height: 280px;
+}
+
+.pr-badge {
+    font-size: 0.7rem;
+    color: #198754;
+    font-weight: bold;
+    margin-left: 4px;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+}
